@@ -1,25 +1,36 @@
 Param (
     [Parameter(Mandatory=$true)][string]$HostID
 )
-
-<# All MaaS scripts can begin with this standard logic which is:
-- do we have credentials in xml file?
-- if so, good
-- if not, get them and put them in a new xml file
+<# 
+Author: Shaun Osborne
+Docs: https://github.com/Cybergate9/ZabbixPowershell/blob/master/docs/MaaSScriptsDocumentation.md
 #>
-if(! (Test-Path "MaaScredentials.xml" -PathType Leaf))
+
+
+
+<# All Zabbix scripts begin with this standard authorisation logic which is:
+###############################################################
+1) do we have credentials in xml file?
+2) if so, good, check it, load it
+3) if not, get them via dialog and put them in the zabbixredentials.xml
+#>
+<# do we have a credentials file? #>
+if(! (Test-Path "zabbizcredentials.xml" -PathType Leaf))
   {
     $creds = Get-Credential $null
-    $creds | Export-CliXML -Path maascredentials.xml
+    $creds | Export-CliXML -Path zabbizcredentials.xml
   }
 
 
 <# Get Credentials and do some basic tests on their validity #>
 $loadedcreds = Import-CliXML "maascredentials.xml"
 if(-not $loadedcreds.Username -or -not $loadedcreds.Username){
-    Write-Output "Credentials file MaasCredentials.xml is invalid - please delete.."
+    Write-Output "Credentials file zabbixredentials.xml is invalid - please delete.."
     exit
 }
+
+<# end of standard authorisation logic
+##############################################################>
 
 <# build login call #>
 $params = '{
