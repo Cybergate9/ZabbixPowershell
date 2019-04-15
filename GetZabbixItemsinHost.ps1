@@ -1,14 +1,10 @@
 Param (
-    [Parameter(Mandatory=$true)][string]$groupid
+    [Parameter(Mandatory=$true)][string]$hostid
  )
 
-<# 
-Author: Shaun Osborne
-Docs: https://github.com/Cybergate9/ZabbixPowershell/blob/master/docs/MaaSScriptsDocumentation.md
-#>
-
-<# do standard credentials lookup, or login #>
+<# do standard credentials load, or login dialog->store #>
 . $PSScriptRoot\SetZabbixCredentials.ps1
+
 
 <# build login call #>
 $params = '{
@@ -35,11 +31,12 @@ if(-not $key.result){
 <# get the api session key out of result, store, and build next request #>
 $params = '{
     "jsonrpc": "2.0",
-    "method": "host.get",
+    "method": "item.get",
     "params": {
-        "groupids": "' + $groupid + '",
+        "output": "extend",
+        "hostids" : "'+ $hostid + '",
         "output" : "extend",
-	"sortfield":"name"
+   	    "sortfield":"name"
     },
     "id": 2,
     "auth": "'+$key.result+'"
@@ -60,8 +57,18 @@ $entries = $content.result
 [PsObject]$output = @()
 foreach($ent in $entries)
     {
-    $output += @{hostid = $ent.hostid; groupid = $groupid; name = $ent.name; host = $ent.host}
+        if($ent.name -match "\$[0-9]")
+            {
+                $ent.key_ -match ".*\[(?<braced>.*)\].*" | out-null
+                $pieces = $Matches.braced.Split(",")
+                $ent.name -match "(?<dolnum>[0-9])" | out-null
+                $newdesc = $pieces[[int]$Matches.dolnum-1]
+                $olddesc = $ent.name -replace "\s\$[0-9]", ""
+                $newdesc = "$olddesc $newdesc"
+            }
+    $output += @{name = $ent.name; key = $ent.key_ ; delay = $ent.delay; description = $newdesc}
     }
 
 
 $output  | %{[pscustomobject]$_}
+

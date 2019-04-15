@@ -1,15 +1,18 @@
 Param (
-    [Parameter(Mandatory=$true)][string]$groupid
- )
+    [Parameter(Mandatory=$true)][string]$hostid
 
+)
 <# 
 Author: Shaun Osborne
 Docs: https://github.com/Cybergate9/ZabbixPowershell/blob/master/docs/MaaSScriptsDocumentation.md
 #>
 
+
 <# do standard credentials lookup, or login #>
 . $PSScriptRoot\SetZabbixCredentials.ps1
 
+$hostname = . $PSScriptRoot\GetZabbixHost.ps1 $hostid | Select -Expand name
+ 
 <# build login call #>
 $params = '{
     "jsonrpc" : "2.0",
@@ -35,11 +38,11 @@ if(-not $key.result){
 <# get the api session key out of result, store, and build next request #>
 $params = '{
     "jsonrpc": "2.0",
-    "method": "host.get",
+    "method": "graph.get",
     "params": {
-        "groupids": "' + $groupid + '",
-        "output" : "extend",
-	"sortfield":"name"
+        "output": "extend",
+        "hostids" : "'+ $hostid + '",
+        "expandExpression" : true
     },
     "id": 2,
     "auth": "'+$key.result+'"
@@ -53,14 +56,12 @@ if( $content.error){
 }
 
 $entries = $result.Content | ConvertFrom-JSON
-
 $entries = $content.result
-
 
 [PsObject]$output = @()
 foreach($ent in $entries)
     {
-    $output += @{hostid = $ent.hostid; groupid = $groupid; name = $ent.name; host = $ent.host}
+      $output += @{graphid = $ent.graphid; name = $ent.name ;host = $hostname;}
     }
 
 
