@@ -1,6 +1,12 @@
 Param (
     [Parameter(Mandatory=$true)][string]$hostid
  )
+<# 
+Author: Shaun Osborne
+Docs: https://github.com/Cybergate9/ZabbixPowershell/blob/master/docs/MaaSScriptsDocumentation.md
+#>
+
+
 
 <# All Zabbix scripts begin with this standard authorisation logic which is:
 ###############################################################
@@ -17,7 +23,7 @@ if(! (Test-Path "zabbizcredentials.xml" -PathType Leaf))
 
 
 <# Get Credentials and do some basic tests on their validity #>
-$loadedcreds = Import-CliXML "maascredentials.xml"
+$loadedcreds = Import-CliXML "zabbizcredentials.xml"
 if(-not $loadedcreds.Username -or -not $loadedcreds.Username){
     Write-Output "Credentials file zabbixredentials.xml is invalid - please delete.."
     exit
