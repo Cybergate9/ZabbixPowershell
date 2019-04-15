@@ -7,6 +7,11 @@ Param (
     [Parameter(Mandatory=$false)][string]$DeviceType='ESX'    
  )
 
+<# 
+Author: Shaun Osborne
+Docs: https://github.com/Cybergate9/ZabbixPowershell/blob/master/docs/MaaSScriptsDocumentation.md
+#>
+
 <# do standard credentials load, or login dialog->store #>
 . $PSScriptRoot\SetZabbixCredentials.ps1
 
@@ -35,7 +40,7 @@ if ($sessionZabbix.Cookies.Count -eq 0)
     }
 else 
     {
-    Write-Host "INFO: MaaS replied to initial request"
+    Write-Host "INFO: Zabbix replied to initial request"
     }
 
 $sessionZabbix.Cookies.SetCookies($zabbixGraphUrl, $sessionZabbix.Cookies.GetCookieHeader($zabbixLoginUrl))
