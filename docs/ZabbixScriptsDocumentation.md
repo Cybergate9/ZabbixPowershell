@@ -29,6 +29,16 @@ This script will open a login dialog into to which you put your username and pas
 
 This script will return all the groups in Zabbix
 
+### GetZabbixHost.ps1
+
+This script will return the Zabbix host name for a given hostid
+e.g.
+
+host        hostid name
+----        ------ ----
+ASADLBAAS01 11611  ASADLBAAS01
+
+
 
 
 
