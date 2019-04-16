@@ -3,7 +3,6 @@ Author: Shaun Osborne
 Docs: https://github.com/Cybergate9/ZabbixPowershell/blob/master/docs/MaaSScriptsDocumentation.md
 #>
 
-
 <# do standard credentials load, or login dialog->store #>
 . $PSScriptRoot\SetZabbixCredentials.ps1
 
@@ -19,7 +18,6 @@ $params = '{
     "auth": null
 }'
 $headers=@{"Content-Type"="application/json"}
-#Write-Output $params
 
 $result = Invoke-WebRequest -Uri "http://maas.iocane.com.au/zabbix/api_jsonrpc.php" -Body $params -Method POST -Headers $headers
 $key = $result.Content | ConvertFrom-JSON
@@ -28,7 +26,6 @@ if(-not $key.result){
     Write-Output 'ERROR: ' + [string]::$result.Content.error
     exit
 }
-#Write-Output $key | ConvertTo-JSON
 
 <# get the api session key out of result, store, and build next request 
 #>
@@ -42,8 +39,6 @@ $params = '{
     "auth": "'+$key.result+'"
 }'
 
-#Write-Output $params
-
 $result = Invoke-WebRequest -Uri "http://maas.iocane.com.au/zabbix/api_jsonrpc.php" -Body $params -Method POST -Headers $headers
 $reply = $result.Content | ConvertFrom-JSON
 if($reply.result -eq ""){
@@ -52,7 +47,13 @@ if($reply.result -eq ""){
 }
 
 $entries = $result.Content | ConvertFrom-JSON
-foreach($entry in $entries.result)
-{
-Write-Host "Groupid: ", $entry.groupid, " Group Name: " , $entry.name 
-}
+
+[PsObject]$output = @()
+foreach($ent in $entries.result)
+    {
+    $output += @{groupid = $ent.groupid; groupname = $ent.name}
+    }
+
+
+$output  | %{[pscustomobject]$_}
+

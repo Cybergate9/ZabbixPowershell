@@ -21,7 +21,9 @@ There is a specific script you can use, if you wish, to set your credentials and
 
 ### SetMaasCredentials
 
-This script will open a login dialog into to which you put your username and password (Zabbix authenticate in ARGH) and then it stores the resultant PSCredential object into MaaSCredentials.xml
+This script will open a login dialog into to which you put your username and password (Zabbix authenticates in ARGH) and then it stores the resultant PSCredential object into MaaSCredentials.xml in the current directory
+
+
 
 
 
