@@ -1,6 +1,6 @@
 <# 
 Author: Shaun Osborne
-Docs: https://github.com/Cybergate9/ZabbixPowershell/blob/master/docs/MaaSScriptsDocumentation.md
+Docs: https://github.com/Cybergate9/ZabbixPowershell/blob/master/docs/ZabbixScriptsDocumentation.md
 #>
 
 #refs:

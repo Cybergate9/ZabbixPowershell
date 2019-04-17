@@ -1,5 +1,5 @@
 Param (
-    [Parameter(Mandatory=$true)][string]$HostID
+    [Parameter(Mandatory=$true)][string]$hostid
 )
 <# 
 Author: Shaun Osborne
