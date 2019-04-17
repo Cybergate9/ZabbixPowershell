@@ -32,6 +32,10 @@ This script will open a login dialog into to which you put your username and pas
 
 This script will return all the groups in Zabbix
 
+### GetZabbixTemplates.ps1
+
+This script will return all the templates in Zabbix
+
 ### GetZabbixHost.ps1
 
 This script will return the Zabbix host name for a given hostid
@@ -128,6 +132,28 @@ delay key
 1h    ifAdminStatus[Device vmnic5 at 15:00.0 nenic]
 1h    ifAdminStatus[Device vmnic4 at 14:00.0 nenic]
 ~~~~~
+
+### GetZabbixItemsinTemplate.ps1
+
+This script will return all the items for a given templateid
+
+e.g.
+./GetZabbixItemsinTemplate.ps1 [-hostid] 11709
+
+~~~~~
+delay key                                                   name                         description
+----- ---                                                   ----                         -----------
+1m    vmware.hv.memory.size.ballooned[{$URL},{HOST.HOST}]   Ballooned memory
+1h    vmware.hv.hw.uuid[{$URL},{HOST.HOST}]                 Bios UUID
+1h    vmware.hv.cluster.name[{$URL},{HOST.HOST}]            Cluster name
+1h    vmware.hv.hw.cpu.num[{$URL},{HOST.HOST}]              CPU cores
+1h    vmware.hv.hw.cpu.freq[{$URL},{HOST.HOST}]             CPU frequency
+1h    vmware.hv.hw.cpu.model[{$URL},{HOST.HOST}]            CPU model
+1h    vmware.hv.hw.cpu.threads[{$URL},{HOST.HOST}]          CPU threads
+1m    vmware.hv.hw.cpu.total[{$URL},{HOST.HOST}]            CPU total
+1m    vmware.hv.cpu.usage[{$URL},{HOST.HOST}]               CPU usage
+~~~~~
+
 
 ### GetZabbixTriggersinHost.ps1
 
