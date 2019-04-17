@@ -5,18 +5,20 @@
 3) if not, get them via dialog and put them in the zabbixredentials.xml
 #>
 <# do we have a credentials file? #>
-if(! (Test-Path $PSScriptRoot"\zabbixcredentials.xml" -PathType Leaf))
+$credspath = $ENV:APPDATA
+$credsfile = '\.zabbixcreds.xml'
+if(! (Test-Path $credspath$credsfile -PathType Leaf))
   {
     $creds = Get-Credential $null
-    $creds | Export-CliXML -Path $PSScriptRoot\zabbixcredentials.xml
+    $creds | Export-CliXML -Path $credspath$credsfile
   }
 
 
 <# Get Credentials and do some basic tests on their validity #>
-$loadedcreds = Import-CliXML $PSScriptRoot"\zabbixcredentials.xml"
+$loadedcreds = Import-CliXML $credspath$credsfile
 #$loadedcreds
 if(-not $loadedcreds.Username -or -not $loadedcreds.Username){
-    Write-Output "Credentials file zabbixredentials.xml is invalid - please delete.."
+    Write-Output "Credentials file:' $credspath$credsfile 'is invalid - please delete.."
     exit
 }
 

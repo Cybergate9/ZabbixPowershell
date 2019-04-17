@@ -14,8 +14,8 @@ This allows the scripts to be combined in various useful ways to extract informa
 
 All access to Zabbix is using your own credentials.
 You must log into Zabbix to use any of the scripts.
-All the scripts will prompt for login, if you are not logged in, and store your credentials in an encrypted 'PSCredential object' xml file
-There is a specific script you can use, if you wish, to set your credentials explicity and then all subsequent called scripts will use thos stored/set credentials (see Functions-SetMaaSCredentials)
+All the scripts will prompt for login, if you are not logged in, and store your credentials in an encrypted 'PSCredential object' xml file (in $ENV:APPDATA)
+There is a specific script you can use, if you wish, to set your credentials explicity to begin with, and then all subsequently called scripts will use those stored/set credentials (see Functions-SetMaaSCredentials)
 
 ### Document conventions
 
