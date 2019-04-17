@@ -1,0 +1,1 @@
+cat .\ZabbixScriptsDocumentation.md| Out-String| ConvertFrom-Markdown  >ZabbixScriptsDocumentation.html
