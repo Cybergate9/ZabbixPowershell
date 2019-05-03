@@ -3,6 +3,7 @@
 ## Introduction
 
 These tools access the live MaaS (Zabbix) environment via its API to perform various useful functions.
+
 The design philosophy is that each script: 
   * does one thing
   * returns 'powershell objects' as output
@@ -10,12 +11,15 @@ The design philosophy is that each script:
 
 This allows the scripts to be combined in various useful ways to extract information from Zabbix (mostly for reporting)
 
-### Authoristation and Credentials
+### Authorisation and Credentials
 
 All access to Zabbix is using your own credentials.
+
 You must log into Zabbix to use any of the scripts.
-All the scripts will prompt for login, if you are not logged in, and store your credentials in an encrypted 'PSCredential object' xml file (in $ENV:APPDATA)
-There is a specific script you can use, if you wish, to set your credentials explicity to begin with, and then all subsequently called scripts will use those stored/set credentials (see Functions-SetMaaSCredentials)
+
+All the scripts will prompt for login, if you do not already have stored credentials (see below), and store your credentials in an encrypted 'PSCredential object' xml file (in $ENV:APPDATA directory)
+
+There is a specific script you can use, if you wish, to set your credentials explicity to begin with, and then all subsequently called scripts will use those stored credentials (see Functions - SetZabbixCredentials.ps1)
 
 ### Document conventions
 
@@ -26,7 +30,7 @@ There is a specific script you can use, if you wish, to set your credentials exp
 
 ### SetZabbixCredentials
 
-This script will open a login dialog into to which you put your username and password (Zabbix authentication) and then it stores the resultant 'PSCredential object' into zabbixcredentials.xml in the directory where the scripts are run from.
+This script will open a login dialog into to which you put your username and password (Zabbix authentication) and then it stores the resultant secure 'PSCredential object' into zabbixcredentials.xml into your $APPDATA folder.
 
 ### GetZabbixGroups.ps1
 
@@ -38,7 +42,7 @@ This script will return all the templates in Zabbix
 
 ### GetZabbixHost.ps1
 
-This script will return the Zabbix host name for a given hostid
+This script will return the Zabbix host name for a given Zabbix hostid
 e.g.
 
 .\GetZabbixHost.ps1 [-hostid] 11161
@@ -51,7 +55,7 @@ e.g.
 
 ### GetZabbixHostsinGroup.ps1
 
-This script will return all hosts for a given groupid
+This script will return all hosts for a given Zabbix groupid
 
 e.g.
 ./GetZabbixHostsinGroup [-groupid] 58
@@ -72,9 +76,10 @@ CH-VICM1-ESX04      00000000-0000-1101-0000-0000000003af 11166  58
 
 ### GetZabbixGraph.ps1
 
-This script will return a jpeg image for a given graphid
+This script will return a jpeg image for a given Zabbix graphid
 
 e.g.
+
 ./GetZabbixGraph.ps1 [-Graphid] 55432 [-Filename <filename>] [-From <string>] [-To <string>] [=Width=<nnn>] [-DeviceType <string>]
 
 ~~~~~
@@ -85,9 +90,10 @@ saved to C:\Users\osbornes\Dropbox\Work-Iocane\docs+scripts\MaaS\55432.jpg
 
 ### GetZabbixGraphsinHost.ps1
 
-This script will return all the graphs for a given hostid
+This script will return all the graphs and their ids for a given Zabbix hostid
 
 e.g.
+
 ./GetZabbixGraphsinHost.ps1 [-hostid] 11161
 
 ~~~~~
@@ -104,9 +110,10 @@ graphid host           name
 
 ### GetZabbixTemplatesinHost.ps1
 
-This script will return all the templates for a given hostid
+This script will return all the Zabbix templates for a given hostid
 
 e.g.
+
 ./GetZabbixTemplatesinHost.ps1 [-hostid] 11161
 
 ~~~~~
@@ -120,6 +127,7 @@ CH-VICM1-ESX01 Iocane-Template-VMware-Hypervisor 10091 Iocane-Template SNMP Inte
 This script will return all the items for a given hostid
 
 e.g.
+
 ./GetZabbixItemsinHost.ps1 [-hostid] 11161
 
 ~~~~~
@@ -138,6 +146,7 @@ delay key
 This script will return all the items for a given templateid
 
 e.g.
+
 ./GetZabbixItemsinTemplate.ps1 [-hostid] 11709
 
 ~~~~~
@@ -160,6 +169,7 @@ delay key                                                   name                
 This script will return all the graphs for a given hostid
 
 e.g.
+
 ./GetZabbixTriggersinHost.ps1 [-hostid] 11161 [-rawexpressions| Format-Table
 
 
@@ -184,6 +194,7 @@ This script will return all the datastore metrics for a given **ESX** hostid
 (the script isn't really useful for running against non ESX hosts..)
 
 e.g.
+
 ./GetZabbixDatastoreInfobyHost.ps1 [-hostid] 11161 | Format-Table
 
 ~~~~
@@ -201,10 +212,10 @@ e.g.
 
 ### DrawDatastoreGraph.ps1
 
-This script takes the input from GetZabbixDatastoreInfobyHost.ps1 and creates a jpg image representing a stacked bar chart for all the datastore in the ESX host.
-(just like GetZabbixDatastoreInfobyHost.ps1, thisscript isn't really useful for running against non ESX hosts and their datastores..)
+This script takes the input from GetZabbixDatastoreInfobyHost.ps1 and creates a jpg image representing a stacked bar chart for all the datastores in an ESX host.
+(just like GetZabbixDatastoreInfobyHost.ps1, this script isn't really useful for running against non ESX hosts and their datastores..)
 
-The default image name will be Hostnamemetrics.jpg byut can be altered using parameter below ($Hostname+$Filename)
+The default image name will be <Hostname><metrics>.jpg but can be altered using parameter below ($Hostname+$Filename)
 
 e.g.  
 
