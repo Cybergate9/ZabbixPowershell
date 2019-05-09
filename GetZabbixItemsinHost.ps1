@@ -1,5 +1,7 @@
 Param (
-    [Parameter(Mandatory=$true)][string]$hostid
+    [Parameter(Mandatory=$true)][string]$hostid,
+    [Parameter(Mandatory=$false)][string]$WithContent 
+      
  )
 
 <# do standard credentials load, or login dialog->store #>
@@ -66,7 +68,13 @@ foreach($ent in $entries)
                 $olddesc = $ent.name -replace "\s\$[0-9]", ""
                 $newdesc = "$olddesc $newdesc"
             }
-    $output += @{name = $ent.name; key = $ent.key_ ; delay = $ent.delay; description = $newdesc}
+    if($WithContent)
+        {        
+         $output += @{name = $ent.name; key = $ent.key_ ; delay = $ent.delay; description = $newdesc; content = $ent}
+      }
+    else {
+         $output += @{name = $ent.name; key = $ent.key_ ; delay = $ent.delay; description = $newdesc} 
+      }
     }
 
 
