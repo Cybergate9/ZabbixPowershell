@@ -1,7 +1,6 @@
 Param (
     [Parameter(Mandatory=$true)][string]$hostid,
-    [Parameter(Mandatory=$false)][string]$WithContent 
-      
+    [Parameter(Mandatory=$false)][string]$WithContent      
  )
 
 <# do standard credentials load, or login dialog->store #>
@@ -20,7 +19,6 @@ $params = '{
     "auth": null
 }'
 $headers=@{"Content-Type"="application/json"}
-#Write-Output $params
 
 $result = Invoke-WebRequest -Uri "http://maas.iocane.com.au/zabbix/api_jsonrpc.php" -Body $params -Method POST -Headers $headers
 $key = $result.Content | ConvertFrom-JSON
@@ -59,7 +57,7 @@ $entries = $content.result
 [PsObject]$output = @()
 foreach($ent in $entries)
     {
-        if($ent.name -match "\$[0-9]")
+        if($ent.name -match "\$[0-9]") # re-jig some descriptions to make them more readable
             {
                 $ent.key_ -match ".*\[(?<braced>.*)\].*" | out-null
                 $pieces = $Matches.braced.Split(",")
@@ -68,7 +66,7 @@ foreach($ent in $entries)
                 $olddesc = $ent.name -replace "\s\$[0-9]", ""
                 $newdesc = "$olddesc $newdesc"
             }
-    if($WithContent)
+    if($WithContent) # if WIthContent requested out the whole entry into content property else just do name, key, delay, description
         {        
          $output += @{name = $ent.name; key = $ent.key_ ; delay = $ent.delay; description = $newdesc; content = $ent}
       }
